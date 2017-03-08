@@ -1,0 +1,101 @@
+<html>
+  <head>
+    <title> Tutorial </title>
+    <style>
+    body {
+      margin : 0px;
+      background-color : #fff;
+      overflow : hidden;
+    }
+    </style>
+  </head>
+  <body onload="main()">
+    <script src="./bin/three.min.js"></script>
+    <script>
+    function main() {
+      renderer = new THREE.WebGLRenderer({antialias : true,});
+      renderer.setSize(800, 800);
+      document.body.appendChild(renderer.domElement);
+      setup();
+      animate();
+    }
+
+    function animate() {
+      update();
+      render();
+      requestAnimationFrame(animate);
+    }
+
+    function setup() {
+      scene = new THREE.Scene();
+      camera = new THREE.Camera();
+      uniforms = {
+        unif_time : { type : "1f", value : 0.0 },
+      };
+      object = new THREE.Object3D();
+      object.add(new THREE.Mesh(
+        new THREE.PlaneGeometry(1.0, 1.0),
+        new THREE.ShaderMaterial({
+          uniforms : uniforms,
+          fragmentShader : `
+          uniform float unif_time;
+          varying vec2 vary_tex;
+
+          const float cnst_width = 0.005;
+          const float cnst_cnt = 1.0;
+
+          float rand(vec2 co){
+            return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
+          }
+          vec2 refc(vec2 st, float sd) {
+            float meta = 0.1 * cos(sd) * sin(st.x * 20.0 + unif_time + sd * 2.0);
+
+            mat3 m;
+            m[0] = vec3( 1.0,  0.0, 0.0);
+            m[1] = vec3( 0.0,  1.0, 0.0);
+            m[2] = vec3( 0.0, meta, 1.0);
+
+            return (m * vec3(st, 1.0)).xy;
+          }
+
+          void main(void) {
+            float a = 0.0;
+
+            for(float i = 0.5 ; i < cnst_cnt ; i ++) {
+              float noise = rand(vec2(vary_tex.x, vary_tex.x) * i);
+              vec2 st = refc(vary_tex.xy, noise);
+              a +=
+                smoothstep(i / cnst_cnt - cnst_width, i / cnst_cnt + cnst_width, st.y) *
+                smoothstep(i / cnst_cnt + cnst_width, i / cnst_cnt - cnst_width, st.y) * 2.0;
+            }
+            gl_FragColor = vec4(1.0, 1.0, 1.0, a);
+          }
+          `,
+          vertexShader : `
+          varying vec2 vary_tex;
+          void main(void) {
+            vary_tex = position.xy + 0.5;
+            gl_Position = vec4(position.xy * 2.0, 0.0, 1.0);
+          }
+
+          `,
+          side : THREE.DoubleSide,
+          transparent : true,
+        })
+      ));
+      scene.add(object);
+    }
+
+    function update() {
+      var time = new Date();
+      uniforms.unif_time.value = time.getMinutes() * 60.0 + time.getSeconds() + (time.getMilliseconds()) / 1000.0;
+    }
+
+    function render() {
+      renderer.autoClear = true;
+      renderer.render(scene, camera);
+    }
+
+    </script>
+  </body>
+</html>
