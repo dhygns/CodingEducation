@@ -20,7 +20,7 @@ class Particles extends THREE.Object3D{
     //This Plane Mesh
     const buffer_count_ = 6;
     const id_width_ = Math.min(cnt, 16384);
-    const id_height_ = Math.min(Math.floor(cnt / 16384), 16384);
+    const id_height_ = Math.min(Math.floor(cnt / 16384) + 1, 16384);
 
     for(var idx = 0; idx < cnt; idx ++) {
       this.indices.push(idx);
@@ -59,7 +59,7 @@ class Particles extends THREE.Object3D{
       }
 
       // mat4
-      mat4 scaleMatrix(float s) {
+      mat4 scale(float s) {
         mat4 m;
         m[0] = vec4(  s, 0.0, 0.0, 0.0);
         m[1] = vec4(0.0,   s, 0.0, 0.0);
@@ -68,7 +68,16 @@ class Particles extends THREE.Object3D{
         return m;
       }
 
-      mat4 transMatrix() {
+      mat4 rotateX(float x) {
+        mat4 m;
+        m[0] = vec4(1.0, 0.0, 0.0, 0.0);
+        m[1] = vec4(0.0, cos(x), -sin(x), 0.0);
+        m[2] = vec4(0.0, sin(x),  cos(x), 0.0);
+        m[3] = vec4(0.0, 0.0, 0.0, 1.0);
+        return m;
+      }
+
+      mat4 trans() {
         float x = (getFloat(unif_posx) - M_FLOAT) * 2.0 * 255.0;
         float y = (getFloat(unif_posy) - M_FLOAT) * 2.0 * 255.0;
         float z = (getFloat(unif_posz) - M_FLOAT) * 2.0 * 255.0;
@@ -86,7 +95,7 @@ class Particles extends THREE.Object3D{
 
       void main(void) {
         vec4 vertex = vec4(position, 1.0);
-        mat4 particleMatrix = transMatrix() * scaleMatrix(0.2);
+        mat4 particleMatrix = trans() * rotateX(idx().x) * scale(0.4);
 
         vtex = vertex.xy * 0.5 + 0.5;
         vnor = normal;

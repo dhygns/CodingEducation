@@ -70,7 +70,7 @@ class ParticleLife {
 
 
     const width_ = Math.min(cnt, 16384);
-    const height_ = Math.min(Math.floor(cnt / 16384), 16384);
+    const height_ = Math.min(Math.floor(cnt / 16384) + 1, 16384);
 
     this.time = new THREE.WebGLRenderTarget(width_, height_, option);
     this.temp = new THREE.WebGLRenderTarget(width_, height_, option);
@@ -165,7 +165,7 @@ class ParticleVelocity {
 
 
     const width_ = Math.min(cnt, 16384);
-    const height_ = Math.min(Math.floor(cnt / 16384), 16384);
+    const height_ = Math.min(Math.floor(cnt / 16384) + 1, 16384);
 
     this.x = new THREE.WebGLRenderTarget(width_, height_, option);
     this.y = new THREE.WebGLRenderTarget(width_, height_, option);
@@ -241,7 +241,7 @@ class ParticlePosition {
     this.rdrr = rdrr;
 
     const width_ = Math.min(cnt, 16384);
-    const height_ = Math.min(Math.floor(cnt / 16384), 16384);
+    const height_ = Math.min(Math.floor(cnt / 16384) + 1, 16384);
 
     this.x = new THREE.WebGLRenderTarget(width_, height_, option);
     this.y = new THREE.WebGLRenderTarget(width_, height_, option);
