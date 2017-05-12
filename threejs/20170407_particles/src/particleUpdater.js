@@ -51,6 +51,7 @@ class ParticleUpdater {
     this.life.update(dt);
     this.velocity.update();
     this.position.update(dt, this.velocity, this.life);
+    this.particles._position.setCreatePoint(50 * Math.sin(this.elapsedtime * 10.0), 50 * Math.cos(this.elapsedtime * 10));
   }
 
   render() {

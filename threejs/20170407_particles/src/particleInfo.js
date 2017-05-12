@@ -158,7 +158,7 @@ class ParticleLife {
 }
 
 class ParticleVelocity {
-  constructor(cnt, rdrr) {
+  constructor(cnt, rdrr, tex) {
     this.setter = new ParticleSetter(rdrr);
     const option = {minFilter : THREE.NearestFilter, magFilter : THREE.NearestFilter,  };
     this.rdrr = rdrr;

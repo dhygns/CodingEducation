@@ -12,6 +12,7 @@ class Particles extends THREE.Object3D{
       unif_posx : { type : "t", value : this._position.x },
       unif_posy : { type : "t", value : this._position.y },
       unif_posz : { type : "t", value : this._position.z },
+      unif_life : { type : "t", value : this._life.time},
     };
 
     this.geom = new THREE.InstancedBufferGeometry();
@@ -39,6 +40,8 @@ class Particles extends THREE.Object3D{
       uniforms : this.unif,
       vertexShader : m_float + `
       attribute float indices;
+
+      uniform sampler2D unif_life;
 
       uniform sampler2D unif_posx;
       uniform sampler2D unif_posy;
@@ -92,11 +95,12 @@ class Particles extends THREE.Object3D{
 
       varying vec2 vtex;
       varying vec3 vnor;
-
+      varying vec4 vlife;
       void main(void) {
         vec4 vertex = vec4(position, 1.0);
-        mat4 particleMatrix = trans() * rotateX(idx().x) * scale(0.4);
+        mat4 particleMatrix = trans() * rotateX(idx().x) * scale(0.3);
 
+        vlife = texture2D(unif_life, idx());//getFloat(unif_life);
         vtex = vertex.xy * 0.5 + 0.5;
         vnor = normal;
         gl_Position = projectionMatrix * viewMatrix * particleMatrix * vertex;
@@ -105,10 +109,11 @@ class Particles extends THREE.Object3D{
       fragmentShader : `
       varying vec2 vtex;
       varying vec3 vnor;
+      varying vec4 vlife;
       void main(void){
 
         vec3 light = normalize(vec3(1.0, 2.0, 3.0));
-        vec3 bright = vec3(dot(light, vnor));
+        vec3 bright = vlife.rgb * dot(light, vnor);
 
         gl_FragColor = vec4(bright, 1.0);
       }
