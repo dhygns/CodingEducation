@@ -230,17 +230,15 @@ class ParticleVelocity {
           float posB = Vec4ToFloat(texture2D(unif_posB, vtex));
           float vel = Vec4ToFloat(texture2D(unif_velocity, vtex));
 
-          float accC = texture2D(unif_accC, vec2(posA, posB)).a;
+          float accC = texture2D(unif_accC, vec2(posA * 0.01, posB * 0.01)).a;
 
           life = ((life - M_FLOAT) * 2.0) * 255.0;
           posA = ((posA - M_FLOAT) * 2.0) * 255.0;
           posB = ((posB - M_FLOAT) * 2.0) * 255.0;
-          accC = ((accC - 0.5) * 2.0) * 10.0;
+          accC = ((accC - 0.5) * 2.0) * 255.0;
+
           vel = ((vel - M_FLOAT) * 2.0) * 255.0;
-
-          vel += accC * unif_deltatime;
-
-
+          vel += accC * 10.0 * unif_deltatime;
           vel = (vel / 255.0 * 0.5 + M_FLOAT);
 
           if(life < 0.0) vel = Vec4ToFloat(randtex(posA * vtex * unif_deltatime));
@@ -359,9 +357,7 @@ class ParticlePosition {
           lif = ((lif - M_FLOAT) * 2.0) * 255.0;
 
           pos += vel * 0.2 * unif_deltatime;
-
           if(lif < 0.0) pos = unif_ptr;
-
           pos = (pos / 255.0 * 0.5 + M_FLOAT);
 
           vec4 retcol = FloatToVec4(pos);

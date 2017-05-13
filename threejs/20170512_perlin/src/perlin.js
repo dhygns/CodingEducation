@@ -31,7 +31,7 @@ class Perlin {
       for(var x = 0; x < 512; x++) {
         // console.log(this.getIdx(x, y));
         const idx = x + y * 512;
-        const value = this.proc((x + 0.5) / 512 * this.width, (y + 0.5) / 512 * this.height) * 255;
+        const value = (128 + this.proc((x + 0.5) / 512 * this.width, (y + 0.5) / 512 * this.height) * 128) ;
         this.DataArray[idx] = value;
         this.tmp[idx] = value;
         // if(y == 0) this.DataArray[idx] = 0;
@@ -74,13 +74,13 @@ class Perlin {
 
   update(dt) {
 
-    for(var y = 0; y < 512; y++) {
-      for(var x = 0; x < 512; x++) {
-
-        const idx = x + y * 512;
-        this.DataArray[idx] ++;
-      }
-    }
+    // for(var y = 0; y < 512; y++) {
+    //   for(var x = 0; x < 512; x++) {
+    //
+    //     const idx = x + y * 512;
+    //     this.DataArray[idx] ++;
+    //   }
+    // }
     this.Texture.needsUpdate = true;
   }
 
