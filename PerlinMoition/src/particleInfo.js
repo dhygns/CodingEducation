@@ -230,12 +230,12 @@ class ParticleVelocity {
           float posB = Vec4ToFloat(texture2D(unif_posB, vtex));
           float vel = Vec4ToFloat(texture2D(unif_velocity, vtex));
 
-          float accC = texture2D(unif_accC, vec2(posA * 0.01, posB * 0.01)).a;
+          float accC = texture2D(unif_accC, vec2(posA / 255.0, posB / 255.0)).a;
 
           life = ((life - M_FLOAT) * 2.0) * 255.0;
           posA = ((posA - M_FLOAT) * 2.0) * 255.0;
           posB = ((posB - M_FLOAT) * 2.0) * 255.0;
-          accC = ((accC - 0.5) * 2.0) * 255.0;
+          accC = ((accC - 0.5) * 2.0) * 2.0;
 
           vel = ((vel - M_FLOAT) * 2.0) * 255.0;
           vel += accC * 10.0 * unif_deltatime;
