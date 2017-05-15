@@ -30,12 +30,17 @@ class Perlin {
     for(var y = 0; y < this.size; y++) {
       for(var x = 0; x < this.size; x++) {
         // console.log(this.getIdx(x, y));
+<<<<<<< HEAD
         const idx = x + y * this.size;
         const pos = {
           x: (x + 0.5) / this.size * (this.width - 1),
           y: (y + 0.5) / this.size * (this.height - 1)
         }
         const value = (128 + this.proc(pos.x, pos.y) * 128);
+=======
+        const idx = x + y * 512;
+        const value = Math.abs(this.proc((x + 0.5) / 512 * this.width, (y + 0.5) / 512 * this.height)) * 255;;//(128 + this.proc((x + 0.5) / 512 * this.width, (y + 0.5) / 512 * this.height) * 128);
+>>>>>>> 4acc1a3c4a933819e4ab1e40fd4f7e8aa7c7213f
         this.DataArray[idx] = value;
       }
     }
