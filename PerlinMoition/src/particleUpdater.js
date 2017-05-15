@@ -49,8 +49,8 @@ class ParticleUpdater {
 
   update(dt) {
     if(isNaN(dt) == false) this.elapsedtime += dt;
-    // this.camera.position.x = 200.0 * Math.cos( Math.PI * this.elapsedtime * 0.1);
-    // this.camera.position.z = 200.0 * Math.sin( Math.PI * this.elapsedtime * 0.1);
+    this.camera.position.x = 200.0 * Math.cos( Math.PI * this.elapsedtime * 0.1);
+    this.camera.position.z = 200.0 * Math.sin( Math.PI * this.elapsedtime * 0.1);
     // this.camera.position.y = 500.0 * Math.sin( Math.PI * 0.4);
     this.camera.lookAt(this.pivot);
 
@@ -63,8 +63,8 @@ class ParticleUpdater {
     this.life.update(dt);
 
 
-    // this.particles._position.setCreatePoint(50 * Math.sin(this.elapsedtime * 10.0), 50 * Math.cos(this.elapsedtime * 10));
-    this.particles._position.setCreatePoint(1 * Math.sin(this.elapsedtime * 10.0), 1 * Math.cos(this.elapsedtime * 10));
+    this.particles._position.setCreatePoint(50 * Math.sin(this.elapsedtime * 10.0), 50 * Math.cos(this.elapsedtime * 10));
+    // this.particles._position.setCreatePoint(1 * Math.sin(this.elapsedtime * 10.0), 1 * Math.cos(this.elapsedtime * 10));
   }
 
   render() {

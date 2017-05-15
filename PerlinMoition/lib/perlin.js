@@ -2,15 +2,16 @@
 
 class Perlin {
   constructor(width, height) {
-    this.width = width << 0;
-    this.height = height << 0 ;
+    this.size = 64;
+    this.width = width << 0 + 1;
+    this.height = height << 0 + 1;
 
     this.infoArray = [];
-    this.infoArray.push(new Float32Array((this.width + 1) * (this.height + 1)));
-    this.infoArray.push(new Float32Array((this.width + 1) * (this.height + 1)));
+    this.infoArray.push(new Float32Array((this.width) * (this.height)));
+    this.infoArray.push(new Float32Array((this.width) * (this.height)));
 
-    for(var y = 0; y <= this.height; y++) {
-      for(var x = 0; x <= this.width; x++) {
+    for(var y = 0; y < this.height; y++) {
+      for(var x = 0; x < this.width; x++) {
         const idx = x + y * this.width;
 
         var vec = new THREE.Vector2(Math.random() * 2.0 - 1.0, Math.random() * 2.0 - 1.0);
@@ -20,22 +21,22 @@ class Perlin {
       }
     }
 
-    this.tmp = new Float32Array(512 * 512);
-    this.DataArray = new Uint8Array(512 * 512);
-    this.Texture = new THREE.DataTexture(this.DataArray, 512, 512, THREE.AlphaFormat);
+    this.DataArray = new Uint8Array(this.size * this.size);
+    this.Texture = new THREE.DataTexture(this.DataArray, this.size, this.size, THREE.AlphaFormat);
     this.Texture.minFilter = THREE.LinearFilter;
     this.Texture.magFilter = THREE.LinearFilter;
 
 
-    for(var y = 0; y < 512; y++) {
-      for(var x = 0; x < 512; x++) {
+    for(var y = 0; y < this.size; y++) {
+      for(var x = 0; x < this.size; x++) {
         // console.log(this.getIdx(x, y));
-        const idx = x + y * 512;
-        const value = (128 + this.proc((x + 0.5) / 512 * this.width, (y + 0.5) / 512 * this.height) * 128);
+        const idx = x + y * this.size;
+        const pos = {
+          x: (x + 0.5) / this.size * (this.width - 1),
+          y: (y + 0.5) / this.size * (this.height - 1)
+        }
+        const value = (128 + this.proc(pos.x, pos.y) * 128);
         this.DataArray[idx] = value;
-        this.tmp[idx] = value;
-        // if(y == 0) this.DataArray[idx] = 0;
-        // if(value <= 0.0) console.log(value);
       }
     }
     // console.log(this.tmp);

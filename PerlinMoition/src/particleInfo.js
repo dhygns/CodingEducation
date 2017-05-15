@@ -120,7 +120,7 @@ class ParticleLife {
 
           lif = ((lif - M_FLOAT) * 2.0) * 255.0;
 
-          if(lif < 0.0) lif = abs(Vec4ToFloat(randtex(vtex)));
+          if(lif < 0.0) lif = rand(vtex) * 6.0 + 3.0;
 
 
           lif -= unif_deltatime * 0.5;
@@ -230,18 +230,19 @@ class ParticleVelocity {
           float posB = Vec4ToFloat(texture2D(unif_posB, vtex));
           float vel = Vec4ToFloat(texture2D(unif_velocity, vtex));
 
-          float accC = texture2D(unif_accC, vec2(posA * 0.01, posB * 0.01)).a;
+          float accC = texture2D(unif_accC, vec2(posA / 255.0 * 10.0, posB / 255.0 * 10.0)).a;
 
           life = ((life - M_FLOAT) * 2.0) * 255.0;
           posA = ((posA - M_FLOAT) * 2.0) * 255.0;
           posB = ((posB - M_FLOAT) * 2.0) * 255.0;
-          accC = ((accC - 0.5) * 2.0) * 255.0;
+          accC = ((accC - 0.5) * 2.0) * 51.2;
 
           vel = ((vel - M_FLOAT) * 2.0) * 255.0;
-          vel += accC * 10.0 * unif_deltatime;
+          vel += accC * unif_deltatime;
+          if(abs(vel) > 255.0) vel = sign(vel) * 255.0;
+          if(life < 0.0) vel = (rand(posA * vtex * unif_deltatime) * 2.0 - 1.0) * 2.5;
           vel = (vel / 255.0 * 0.5 + M_FLOAT);
 
-          if(life < 0.0) vel = Vec4ToFloat(randtex(posA * vtex * unif_deltatime));
           vec4 retcol = FloatToVec4(vel);
           gl_FragColor = vec4(retcol.rgb, 1.0);
         }

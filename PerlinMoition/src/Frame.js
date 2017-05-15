@@ -4,7 +4,7 @@ class Frame {
   constructor(rdrr) {
     this.rdrr = rdrr;
 
-    this.particlemng = new ParticleUpdater(512, rdrr);//16384 * 16, rdrr);
+    this.particlemng = new ParticleUpdater(4096, rdrr);//16384 * 16, rdrr);
   }
 
   update(dt) {
