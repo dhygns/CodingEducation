@@ -121,7 +121,6 @@ public class Chapter1Manager : MonoBehaviour
 
     IEnumerator LearnLogic()
     {
-        float targetAlpha = 0.0f;
         SelectableObject dislpayedSO = null;
         while (_currentMode == Mode.Learn)
         {
@@ -159,39 +158,54 @@ public class Chapter1Manager : MonoBehaviour
 
     IEnumerator SolveLogic()
     {
-        var remainedQnA = questionAndAnswers.Where(qna => !qna.isAnswered);
+        _messageText.color = new Color(_messageText.color.r, _messageText.color.g, _messageText.color.b, 1.0f);
+        _subMessageText.color = new Color(_subMessageText.color.r, _subMessageText.color.g, _subMessageText.color.b, 1.0f);
 
-        System.Random rand = new System.Random();
-        int index = rand.Next(remainedQnA.Count());
-        _currentQnA = remainedQnA.ElementAt(index);
-
-        _messageText.text = _currentQnA.question;
-
-        while (true)
+        while(_currentMode == Mode.Solve)
         {
-            if (_currentQnA.answer.Contains(_clickedLastObject))
+            var remainedQnA = questionAndAnswers.Where(qna => !qna.isAnswered);
+
+            System.Random rand = new System.Random();
+            int index = rand.Next(remainedQnA.Count());
+            _currentQnA = remainedQnA.ElementAt(index);
+
+            _messageText.text = _currentQnA.question;
+            _clickedLastObject = null;
+            
+            while (_currentMode == Mode.Solve)
             {
-                _isReadyToSolve = false;
-                _subMessageText.text = "<color=#00FF00>YES</color>";
-                _clickedLastObject = null;
+                if (_currentQnA.answer.Contains(_clickedLastObject))
+                {
+                    _isReadyToSolve = false;
+                    _subMessageText.text = "<color=#00FF00>YES</color>";
+                    _clickedLastObject = null;
 
-                yield return new WaitForSeconds(4.0f);
+                    yield return new WaitForSeconds(4.0f);
 
-                _messageText.text = "";
-                _subMessageText.text = "";
-                _currentQnA.isAnswered = true;
+                    _messageText.text = "";
+                    _subMessageText.text = "";
+                    _currentQnA.isAnswered = true;
 
-                break;
-            }
-            else if (_clickedLastObject != null)
-            {
-                _subMessageText.text = "Nahh :P";
-                _clickedLastObject = null;
+                    break;
+                }
+                else if (_clickedLastObject != null)
+                {
+                    _subMessageText.text = "Nahh :P";
+                    _clickedLastObject = null;
+                }
+
+                yield return null;
             }
 
             yield return null;
         }
 
         _logicHandler = null;
+    }
+
+    public void MoveToNext()
+    {
+        Debug.LogWarning(_currentMode);
+        _currentMode = Mode.Solve;
     }
 }
