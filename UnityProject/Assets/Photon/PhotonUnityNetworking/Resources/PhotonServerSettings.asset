@@ -23,7 +23,7 @@ MonoBehaviour:
     Server: 
     Port: 0
     ProxyServer: 
-    Protocol: 4
+    Protocol: 5
     EnableProtocolFallback: 1
     AuthMode: 0
     EnableLobbyStatistics: 0
@@ -39,13 +39,10 @@ MonoBehaviour:
   - DestroySpaceship
   - Fire
   - RespawnSpaceship
-  - SendData
-  - GetInputs
   - RPC_GetInputs
-  - RPC_OnPlayerEntered
-  - RPC_ReceivedInputs
   - RPC_SetupInfo
   - RPC_SetupStudentInfo
+  - SendData
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
