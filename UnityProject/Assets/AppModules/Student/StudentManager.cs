@@ -27,12 +27,18 @@ public class StudentManager : MonoBehaviour
     [SerializeField] private TMP_Text _roomFailedMessage;
 
     [Header("Game View")]
+    [SerializeField] private StudentInputButton _gameStudentInputButtonPrefab;
+    [SerializeField] private StudentInputPreviewButton _gameStudentInputPreviewButtonPrefab;
     [SerializeField] private TMP_Text _gameViewTitle;
-    [SerializeField] private TMP_Text _allowedButtonsLayout;
+    [SerializeField] private Transform _registeredInputPreviewLayout;
+    [SerializeField] private Transform _allowedInputButtonsLayout;
     
-    private int _level = -1;
+    #region  Game Field
     private StudentInput _allowedInputs;
-    
+    private List<StudentInput> _registeredInputs = new List<StudentInput>();
+    private int _level = -1;
+    #endregion
+
     public void Awake()
     {
         if (_instance == null)
@@ -47,11 +53,40 @@ public class StudentManager : MonoBehaviour
             _instance = null;
     }
 
+    private void ClearAndCreateAllowedInputs(StudentInput allowedInputs)
+    {
+        //clear all generated values
+        foreach(Transform child in _allowedInputButtonsLayout)
+        {
+            Destroy(child.gameObject);
+        }
+
+        foreach(StudentInput val in Enum.GetValues(typeof(StudentInput)))
+        {
+            if ((val & allowedInputs) != (StudentInput)0)
+            {
+                Instantiate(_gameStudentInputButtonPrefab, _allowedInputButtonsLayout).Setup(val);
+            }
+        }
+    }
+
     static public void SetupInfo(int level, StudentInput allowedInputs)
     {
         _instance._level = level;
         _instance._allowedInputs = allowedInputs;
         ShowGameView(level, allowedInputs);
+    }
+
+    static public void RegisterInput(StudentInput inputType)
+    {
+        _instance._registeredInputs.Add(inputType);
+        Instantiate(_instance._gameStudentInputPreviewButtonPrefab, _instance._registeredInputPreviewLayout).Setup(inputType);
+    }
+
+    static public void DeregisterInput(GameObject preview)
+    {
+        _instance._registeredInputs.RemoveAt(preview.transform.GetSiblingIndex());
+        Destroy(preview);
     }
 
     static public void ShowConnectingView()
@@ -113,6 +148,11 @@ public class StudentManager : MonoBehaviour
         _instance._gameView.SetActive(_instance._level != -1);
 
         _instance._gameViewTitle.text = $"{level}";
-        _instance._allowedButtonsLayout.text = $"{allowedInputs}";
+
+        // show buttons by allowed inputs
+        if (level != -1)
+        {
+            _instance.ClearAndCreateAllowedInputs(allowedInputs);
+        }
     }
 }
