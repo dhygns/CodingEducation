@@ -89,6 +89,16 @@ public class StudentManager : MonoBehaviour
         Destroy(preview);
     }
 
+    static public void SubmitRegisteredInputs()
+    {
+        DataCarrier.RequestSendInputsToTeacher(_instance._registeredInputs.ToArray());
+        foreach(Transform registeredInputPreview in _instance._registeredInputPreviewLayout)
+        {
+            Destroy(registeredInputPreview.gameObject);
+        }
+        _instance._registeredInputs.Clear();
+    }
+
     static public void ShowConnectingView()
     {
         _instance._connectingView.SetActive(true);

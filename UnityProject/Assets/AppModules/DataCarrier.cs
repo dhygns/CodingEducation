@@ -14,12 +14,6 @@ public class DataCarrier : MonoBehaviourPunCallbacks
     [Flags]
     public enum StudentInput { Up = 1 << 0, Down = 1 << 1, Left = 1 << 2, Right = 1 << 3 }
 
-    public class StudentData
-    {
-        public int actorNumber;
-        public List<StudentInput> inputs;
-    }    
-
     public void Awake()
     {
         if (_instance == null)

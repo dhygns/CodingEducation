@@ -17,6 +17,7 @@ public class TeacherManager : MonoBehaviour
     [Header("Required Prefabs")]
     [SerializeField] private StudentPanel _studentPanelPrefab;
     [SerializeField] private GameObject _levelPanelPrefab;
+    [SerializeField] private SubmittedStudentDataView _submittedStudentDataViewPrefab;
 
     [Header("Views")]
     [SerializeField] private GameObject _connectingView;
@@ -32,10 +33,9 @@ public class TeacherManager : MonoBehaviour
 
     [Header("Game View")]
     [SerializeField] private TMP_Text _gameViewTitle;
-    [SerializeField] private TMP_Text _mapView; // tmp
+    [SerializeField] private Transform _submittedStudentDataViewLayout;
     
     private Dictionary<int, StudentPanel> _studentPanels = new Dictionary<int, StudentPanel>();
-    private List<StudentData> _requestedStudentData = new List<StudentData>();
 
     private string _roomName;
     private int _level = -1;
@@ -69,6 +69,11 @@ public class TeacherManager : MonoBehaviour
         _instance._allowedInputs = allowedInputs;
         _instance._map = map;
         ShowGameView(level, map);
+    }
+
+    static public void PlayInputs(IEnumerable<StudentInput> inputs)
+    {
+
     }
 
     static public void ShowConnectingView()
@@ -120,7 +125,6 @@ public class TeacherManager : MonoBehaviour
 
         //set map / level
         _instance._gameViewTitle.text = $"{level}";
-        _instance._mapView.text = $"{map}";
     }
 
     static public void RemoveStudent(int actorNumber)
@@ -138,10 +142,11 @@ public class TeacherManager : MonoBehaviour
 
     static public void EnqueueStudentRequest(int actorNumber, IEnumerable<StudentInput> inputs)
     {
-        _instance._requestedStudentData.Add(new StudentData()
-        {
-            actorNumber = actorNumber,
-            inputs = new List<StudentInput>(inputs)
-        });
+        Instantiate(_instance._submittedStudentDataViewPrefab, _instance._submittedStudentDataViewLayout).Setup(actorNumber, inputs);
+    }
+    
+    static public string GetStudentName(int actorNumber)
+    {
+        return _instance._studentPanels[actorNumber].studentName;
     }
 }
