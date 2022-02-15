@@ -8,6 +8,7 @@ public class StudentInputPreviewButton : MonoBehaviour
 {
     [SerializeField] TMP_Text _buttonText;
     private StudentInput _inputType;
+    
     public void Setup(StudentInput inputType)
     {
         _inputType = inputType;

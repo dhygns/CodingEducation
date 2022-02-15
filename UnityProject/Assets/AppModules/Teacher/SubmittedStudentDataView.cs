@@ -31,6 +31,6 @@ public class SubmittedStudentDataView : MonoBehaviour
 
     public void OnPlayButtonClicked()
     {
-        TeacherManager.PlayInputs(_inputs);
+        TeacherManager.PlayInputs(this);
     }
 }

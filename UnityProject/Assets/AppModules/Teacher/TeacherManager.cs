@@ -71,9 +71,9 @@ public class TeacherManager : MonoBehaviour
         ShowGameView(level, map);
     }
 
-    static public void PlayInputs(IEnumerable<StudentInput> inputs)
+    static public void PlayInputs(SubmittedStudentDataView submittedStudentData)
     {
-
+        Destroy(submittedStudentData.gameObject); // TODO : 
     }
 
     static public void ShowConnectingView()
@@ -117,6 +117,8 @@ public class TeacherManager : MonoBehaviour
 
     static public void ShowGameView(int level, string map)
     {
+        ClearStudentRequests();
+
         _instance._connectingView.SetActive(false);
         _instance._joiningLobbyView.SetActive(false);
         _instance._creatingRoomView.SetActive(false);
@@ -143,6 +145,14 @@ public class TeacherManager : MonoBehaviour
     static public void EnqueueStudentRequest(int actorNumber, IEnumerable<StudentInput> inputs)
     {
         Instantiate(_instance._submittedStudentDataViewPrefab, _instance._submittedStudentDataViewLayout).Setup(actorNumber, inputs);
+    }
+
+    static public void ClearStudentRequests()
+    {
+        foreach(Transform submittedView in _instance._submittedStudentDataViewLayout)
+        {
+            Destroy(submittedView);
+        }
     }
     
     static public string GetStudentName(int actorNumber)
